@@ -1,112 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cat or Dog Classifier</title>
     <style>
-        body {
-            font-family: sans-serif;
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 0 20px;
-            color: #222;
-        }
+      body {
+        font-family: sans-serif;
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 0 20px;
+        color: #222;
+      }
 
-        h1 { margin-bottom: 8px; }
-        p  { color: #666; margin-bottom: 32px; }
+      h1 {
+        margin-bottom: 8px;
+      }
+      p {
+        color: #666;
+        margin-bottom: 32px;
+      }
 
-        input[type="file"] { display: block; margin-bottom: 12px; }
+      input[type="file"] {
+        display: block;
+        margin-bottom: 12px;
+      }
 
-        img#preview {
-            display: none;
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-        }
+      img#preview {
+        display: none;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+      }
 
+      button {
+        padding: 10px 24px;
+        background: #222;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
 
-        button {
-            padding: 10px 24px;
-            background: #222;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
+      button:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+      }
 
-        button:disabled { background: #aaa; cursor: not-allowed; }
+      #result {
+        margin-top: 35px;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-left: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      #result .confidence {
+        font-size: 0.7rem;
+        font-weight: normal;
+        font-family: "Courier New", Courier, monospace;
+      }
 
-        #result {
-            margin-top: 24px;
-            font-size: 1.4rem;
-            font-weight: bold;
-        }
+      hr {
+        margin: 40px 0;
+        border: none;
+        border-top: 1px solid #eee;
+      }
 
-        hr { margin: 40px 0; border: none; border-top: 1px solid #eee; }
+      #graph {
+        width: 100%;
+      }
+      .title {
+        position: relative;
+        width: fit-content;
+      }
+      .title img {
+        position: absolute;
+        width: 100%;
+        top: -40px;
+        left: -20px;
+      }
 
-        #graph { width: 100%; }
-        .title {
-            position: relative;
-            width: fit-content;
-        }
-        .title img {
-            position: absolute;
-            width: 100%;
-            top: -40px;
-            left: -20px;
-        }
+      .title h1 {
+        margin: 0;
+      }
 
+      .preview-box {
+        position: relative;
+        width: fit-content;
+      }
+      #preview {
+        display: block;
+      }
+      .yellow-border {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        width: 100%;
+        height: 100%;
+        transform: scale(1.05);
+        opacity: 0.7;
+      }
 
+      .right img {
+        width: 100%;
+        /* position: absolute;
+        top: -20px;
+        left: 0; */
+      }
+      .right {
+        position: relative;
+        display: none;
+      }
+      main {
+        display: flex;
+      }
 
-        .title h1 {
-            margin: 0;
-        }
-
-        .preview-box {
-            position: relative;
-            width: fit-content;
-        }
-        #preview {
-            display: block;
-        }
-        .yellow-border {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: none;
-            width: 100%;
-            height: 100%;
-            transform: scale(1.05);
-            opacity: 0.7;
-        }
+      footer {
+        margin-top: 30px;
+      }
+      footer img {
+        width: 100%;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="title">
-        <img src="/static/title.svg">
-        <h1>Cat or Dog Classifier</h1>
+      <img src="/static/title.svg" />
+      <h1>Cat or Dog Classifier</h1>
     </div>
-    
 
     <p>Upload a photo and the CNN will classify it.</p>
 
-    <input type="file" id="imageInput" accept="image/*">
-    <div class="preview-box">
-        <img id="preview">
-        <img class="yellow-border" src="/static/border.svg">
-    </div>
-    <button id="classifyBtn" onclick="predict()" disabled>Classify</button>
+    <main>
+      <div class="left">
+        <input type="file" id="imageInput" accept="image/*" />
+        <div class="preview-box">
+          <img id="preview" />
+          <img class="yellow-border" src="/static/border.svg" />
+        </div>
+        <button id="classifyBtn" onclick="predict()" disabled>Classify</button>
+        <div id="result">
+          <span class="result-type"></span>
+          <span class="confidence"></span>
+        </div>
+      </div>
+      <div class="right">
+        <img src="/static/explanation.svg" alt="" />
+      </div>
+    </main>
 
-    <div id="result"></div>
-
-    <hr>
+    <hr />
     <h3>Training Evaluation</h3>
-    <img id="graph" src="/graph">
-
+    <img id="graph" src="/graph" />
+    <footer>
+      <img src="/static/footer.svg" alt="" />
+    </footer>
     <script src="/static/script.js"></script>
-</body>
+  </body>
 </html>
