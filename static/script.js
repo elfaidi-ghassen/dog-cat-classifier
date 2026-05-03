@@ -9,6 +9,7 @@ input.addEventListener('change', function() {
     preview.style.display = 'block'
     document.querySelector('.yellow-border').style.display = 'block'  // show border
     btn.disabled = false
+    document.getElementById('result').textContent = ""
 })
 
 
